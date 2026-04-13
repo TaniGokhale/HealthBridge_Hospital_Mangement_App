@@ -9,6 +9,8 @@ import appointmentRoutes from "./routes/appointmentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
 
+
+
 dotenv.config();
 connectDB();
 
@@ -20,6 +22,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/appointments", appointmentRoutes);
+
+
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/patient", patientRoutes);
