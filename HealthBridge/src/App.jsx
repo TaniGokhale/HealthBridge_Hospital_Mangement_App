@@ -16,10 +16,9 @@ import ManageAppointments from "./pages/Admin/ManageAppointments";
 
 // Doctor
 import DoctorDash from "./pages/Doctor/Dashboard";
-import Appointments from "./pages/Doctor/Appointments";
+import Appointments from "./pages/Doctor/Appointment";
 import AddPrescription from "./pages/Doctor/AddPrescription";
 
-// Patient
 import PatientDash from "./pages/Patient/Dashboard";
 import Book from "./pages/Patient/BookAppointment";
 import My from "./pages/Patient/MyAppointments";
