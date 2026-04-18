@@ -1,17 +1,15 @@
 import { useAuth } from "../hooks/useAuth";
+import "./Layout.css";
 
 function Navbar() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
 
   return (
-    <div style={{ padding: "10px", background: "#222", color: "#fff" }}>
-      <span>HealthBridge</span>
-      {user && (
-        <button onClick={logout} style={{ float: "right" }}>
-          Logout
-        </button>
-      )}
+    <div className="navbar">
+      <h3>HealthBridge</h3>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 }
+
 export default Navbar;

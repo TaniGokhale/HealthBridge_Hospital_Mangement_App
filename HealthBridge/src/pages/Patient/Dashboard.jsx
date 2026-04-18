@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
+import Layout from "../../components/Layout";
 
 function Dashboard() {
   return (
-    <div>
-      <h2>Patient Dashboard</h2>
-      <Link to="/book">Book Appointment</Link><br/>
-      <Link to="/my">My Appointments</Link>
-    </div>
+    <Layout>
+      <h2>Welcome Patient 👋</h2>
+      <p>Use sidebar to book and manage appointments.</p>
+    </Layout>
   );
 }
+
 export default Dashboard;

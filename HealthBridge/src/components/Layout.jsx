@@ -1,17 +1,18 @@
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import "./Layout.css";
 
 function Layout({ children }) {
   return (
-    <div>
+    <div className="layout">
       <Navbar />
-      <div style={{ display: "flex" }}>
-        <Sidebar />
-        <div style={{ padding: "20px", width: "100%" }}>
-          {children}
-        </div>
+      <Sidebar />
+
+      <div className="main-content">
+        {children}
       </div>
     </div>
   );
 }
+
 export default Layout;

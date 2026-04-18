@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
+import "./Doctor.css";
 
 function Appointments() {
   const [data, setData] = useState([]);
@@ -8,22 +9,18 @@ function Appointments() {
     API.get("/appointments").then(res => setData(res.data));
   }, []);
 
-  const update = async (id, status) => {
-    await API.put(`/doctors/appointment/${id}`, { status });
-    alert("Updated");
-  };
-
   return (
-    <div>
-      <h2>Appointments</h2>
+    <div className="doctor-container">
+      <h2 className="title">All Appointments</h2>
+
       {data.map(a => (
-        <div key={a._id}>
-          <p>{a.patient?.name}</p>
-          <button onClick={()=>update(a._id,"approved")}>Accept</button>
-          <button onClick={()=>update(a._id,"rejected")}>Reject</button>
+        <div className="card" key={a._id}>
+          <p>Patient: {a.patientId?.name}</p>
+          <p>Status: {a.status}</p>
         </div>
       ))}
     </div>
   );
 }
+
 export default Appointments;

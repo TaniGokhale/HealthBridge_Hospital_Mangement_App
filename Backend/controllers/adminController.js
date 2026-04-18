@@ -2,19 +2,11 @@ import Doctor from "../models/Doctor.js";
 import User from "../models/User.js";
 import Appointment from "../models/Appointment.js";
 
-// Add Doctor
+/* ================= ADD DOCTOR ================= */
 export const addDoctor = async (req, res) => {
-  const { name, email, password, specialization, experience, fees } = req.body;
-
-  const user = await User.create({
-    name,
-    email,
-    password,
-    role: "doctor"
-  });
+  const { specialization, experience, fees } = req.body;
 
   const doctor = await Doctor.create({
-    userId: user._id,
     specialization,
     experience,
     fees
@@ -23,32 +15,32 @@ export const addDoctor = async (req, res) => {
   res.json(doctor);
 };
 
-// Delete Doctor
+/* ================= DELETE DOCTOR ================= */
 export const deleteDoctor = async (req, res) => {
-  const doctor = await Doctor.findById(req.params.id);
-  if (!doctor) return res.status(404).json({ message: "Doctor not found" });
-
-  await User.findByIdAndDelete(doctor.userId);
-  await doctor.deleteOne();
-
-  res.json({ message: "Doctor removed" });
+  await Doctor.findByIdAndDelete(req.params.id);
+  res.json({ message: "Doctor deleted" });
 };
 
-// Get All Patients
+/* ================= GET PATIENTS ================= */
 export const getPatients = async (req, res) => {
   const patients = await User.find({ role: "patient" });
   res.json(patients);
 };
 
-// Dashboard
-export const getDashboard = async (req, res) => {
-  const totalDoctors = await Doctor.countDocuments();
-  const totalPatients = await User.countDocuments({ role: "patient" });
-  const totalAppointments = await Appointment.countDocuments();
+/* ================= GET ALL APPOINTMENTS ================= */
+export const getAllAppointments = async (req, res) => {
+  const data = await Appointment.find()
+    .populate("patientId", "name email")
+    .populate("doctorId");
 
-  res.json({
-    totalDoctors,
-    totalPatients,
-    totalAppointments
-  });
+  res.json(data);
+};
+
+/* ================= DASHBOARD STATS ================= */
+export const getStats = async (req, res) => {
+  const doctors = await Doctor.countDocuments();
+  const patients = await User.countDocuments({ role: "patient" });
+  const appointments = await Appointment.countDocuments();
+
+  res.json({ doctors, patients, appointments });
 };

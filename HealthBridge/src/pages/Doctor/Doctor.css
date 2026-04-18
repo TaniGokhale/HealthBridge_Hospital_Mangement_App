@@ -1,0 +1,97 @@
+.doctor-container {
+  padding: 20px;
+  background: #f4f8ff;
+  min-height: 100%;
+}
+
+/* Title */
+.title {
+  text-align: center;
+  color: #0d6efd;
+  margin-bottom: 20px;
+}
+
+/* Doctor Info */
+.doctor-info {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  animation: fadeIn 0.5s ease;
+}
+
+/* Cards */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.accept {
+  background: #28a745;
+  color: white;
+}
+
+.reject {
+  background: #dc3545;
+  color: white;
+}
+
+.prescription {
+  background: #0d6efd;
+  color: white;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

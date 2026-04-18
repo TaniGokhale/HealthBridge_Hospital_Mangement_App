@@ -1,22 +1,36 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
+import Layout from "../../components/Layout";
+import "./Admin.css";
 
 function ManageAppointments() {
-  const [data, setData] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+
+  const fetchAppointments = async () => {
+    const res = await API.get("/appointments");
+    setAppointments(res.data);
+  };
 
   useEffect(() => {
-    API.get("/appointments").then(res => setData(res.data));
+    fetchAppointments();
   }, []);
 
   return (
-    <div>
-      <h2>All Appointments</h2>
-      {data.map(a => (
-        <div key={a._id}>
-          <p>{a.patient?.name} - {a.status}</p>
-        </div>
-      ))}
-    </div>
+    <Layout>
+      <div className="admin-container">
+        <h2>All Appointments</h2>
+
+        {appointments.map(a => (
+  <div key={a._id} className="card">
+    <p>Patient: {a.patientId?.name}</p>
+    <p>Doctor: {a.doctorId?.specialization}</p>
+    <p>Status: {a.status}</p>
+    <p>💰 Payment: {a.paymentStatus}</p>
+  </div>
+))}
+      </div>
+    </Layout>
   );
 }
+
 export default ManageAppointments;

@@ -1,40 +1,39 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
+import Layout from "../../components/Layout";
+import "./Admin.css";
 
 function ManageDoctors() {
-  const [data, setData] = useState([]);
-  const [form, setForm] = useState({});
+  const [doctors, setDoctors] = useState([]);
 
-  useEffect(() => {
-    API.get("/doctors").then(res => setData(res.data));
-  }, []);
-
-  const add = async () => {
-    await API.post("/admin/doctor", form);
-    alert("Added");
+  const fetchDoctors = async () => {
+    const res = await API.get("/doctors");
+    setDoctors(res.data);
   };
 
-  const remove = async (id) => {
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+  const deleteDoctor = async (id) => {
     await API.delete(`/admin/doctor/${id}`);
-    alert("Deleted");
+    fetchDoctors();
   };
 
   return (
-    <div>
-      <h2>Doctors</h2>
+    <Layout>
+      <div className="admin-container">
+        <h2>Manage Doctors</h2>
 
-      <input placeholder="Name" onChange={e=>setForm({...form,name:e.target.value})}/>
-      <input placeholder="Email" onChange={e=>setForm({...form,email:e.target.value})}/>
-      <input placeholder="Password" onChange={e=>setForm({...form,password:e.target.value})}/>
-      <button onClick={add}>Add</button>
-
-      {data.map(d=>(
-        <div key={d._id}>
-          <p>{d.userId?.name}</p>
-          <button onClick={()=>remove(d._id)}>Delete</button>
-        </div>
-      ))}
-    </div>
+        {doctors.map(d => (
+          <div className="card" key={d._id}>
+            <p>{d.specialization}</p>
+            <button onClick={() => deleteDoctor(d._id)}>Delete</button>
+          </div>
+        ))}
+      </div>
+    </Layout>
   );
 }
+
 export default ManageDoctors;

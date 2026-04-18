@@ -1,22 +1,34 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
+import Layout from "../../components/Layout";
+import "./Admin.css";
 
 function ManagePatients() {
-  const [data, setData] = useState([]);
+  const [patients, setPatients] = useState([]);
+
+  const fetchPatients = async () => {
+    const res = await API.get("/admin/patients");
+    setPatients(res.data);
+  };
 
   useEffect(() => {
-    API.get("/admin/patients").then(res => setData(res.data));
+    fetchPatients();
   }, []);
 
   return (
-    <div>
-      <h2>Patients</h2>
-      {data.map(p => (
-        <div key={p._id}>
-          <p>{p.name} - {p.email}</p>
-        </div>
-      ))}
-    </div>
+    <Layout>
+      <div className="admin-container">
+        <h2>Manage Patients</h2>
+
+        {patients.map(p => (
+          <div className="card" key={p._id}>
+            <p>{p.name}</p>
+            <p>{p.email}</p>
+          </div>
+        ))}
+      </div>
+    </Layout>
   );
 }
+
 export default ManagePatients;

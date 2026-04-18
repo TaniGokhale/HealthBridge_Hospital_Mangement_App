@@ -8,13 +8,14 @@ export const AuthProvider = ({ children }) => {
   );
 
   const login = (data) => {
-    setUser(data);
     localStorage.setItem("user", JSON.stringify(data));
+    setUser(data);
   };
 
   const logout = () => {
-    setUser(null);
     localStorage.removeItem("user");
+    setUser(null);
+    window.location.href = "/";
   };
 
   return (
