@@ -1,58 +1,50 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
-import Layout from "../../components/Layout";
-import "./Patient.css";
 
 function MyAppointments() {
-  const [appointments, setAppointments] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchAppointments();
+    API.get("/appointments/my")
+      .then(res => setData(res.data))
+      .catch(() => setData([]));
   }, []);
 
-  const fetchAppointments = async () => {
-    try {
-      const res = await API.get("/appointments/my");
-      setAppointments(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const cancel = async (id) => {
-    try {
-      await API.delete(`/appointments/${id}`);
-      alert("Cancelled ❌");
-      fetchAppointments();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
-    <Layout>
-      <div className="patient-container">
-        <h2 className="title">My Appointments 📅</h2>
+    <div className="page">
+      <h2>My Appointments</h2>
 
-        {appointments.length === 0 && (
-          <div className="empty">No Appointments Yet 📭</div>
-        )}
+      {data.map(a => (
+        <div className="card" key={a._id}>
 
-        <div className="card-container">
-          {appointments.map((a) => (
-            <div className="card" key={a._id}>
-              <h3>{a.doctorId?.specialization}</h3>
-              <p>Date: {new Date(a.date).toLocaleString()}</p>
-              <p>Status: {a.status}</p>
+          <h3>{a.doctor?.userId?.name}</h3>
+          <p>Status: {a.status}</p>
 
-              <button onClick={() => cancel(a._id)}>
-                Cancel
-              </button>
-            </div>
-          ))}
+          {a.status !== "pending" && (
+            <>
+              <p>Date: {a.date}</p>
+              <p>Time: {a.time}</p>
+              <p>Fees: ₹{a.fees}</p>
+            </>
+          )}
+
+          {a.mode === "online" && (
+            <a href={a.meetingLink}>Join Meeting</a>
+          )}
+
+          {a.mode === "offline" && (
+            <p>Visit: {a.hospitalAddress}</p>
+          )}
+
+          {a.prescription && (
+            <p>Prescription: {a.prescription}</p>
+          )}
+
+          <p>Payment: {a.paymentStatus}</p>
+
         </div>
-      </div>
-    </Layout>
+      ))}
+    </div>
   );
 }
 

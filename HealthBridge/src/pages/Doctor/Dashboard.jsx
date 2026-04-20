@@ -5,106 +5,156 @@ import "./Doctor.css";
 
 function Dashboard() {
   const [appointments, setAppointments] = useState([]);
-  const [doctor, setDoctor] = useState(null);
+  const [doctor, setDoctor] = useState({});
+  const [form, setForm] = useState({});
 
   useEffect(() => {
     fetchAppointments();
     fetchDoctor();
   }, []);
 
-  // 🔥 GET APPOINTMENTS
   const fetchAppointments = async () => {
-    try {
-      const res = await API.get("/appointments");
-      setAppointments(res.data);
-    } catch (err) {
-      console.log(err);
-    }
+    const res = await API.get("/appointments/doctor");
+    setAppointments(res.data);
   };
 
-  // 🔥 GET DOCTOR INFO
   const fetchDoctor = async () => {
-    try {
-      const res = await API.get("/doctors"); // simple fetch
-      setDoctor(res.data[0]); // demo purpose
-    } catch (err) {
-      console.log(err);
-    }
+    const res = await API.get("/doctors/me");
+    setDoctor(res.data || {});
   };
 
-  // 🔥 UPDATE STATUS
-  const updateStatus = async (id, status) => {
-    await API.put(`/doctors/appointment/${id}`, { status });
+  const handleChange = (id, field, value) => {
+    setForm(prev => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [field]: value
+      }
+    }));
+  };
+
+  const approve = async (id) => {
+    await API.put(`/appointments/${id}`, {
+      ...form[id],
+      status: "approved"
+    });
     fetchAppointments();
   };
 
-  // 🔥 ADD PRESCRIPTION
-  const addPrescription = async (patientId) => {
-    const text = prompt("Enter prescription");
-    if (!text) return;
-
-    await API.post("/doctors/prescription", {
-      patientId,
-      text,
+  const complete = async (id) => {
+    await API.put(`/appointments/${id}`, {
+      prescription: form[id]?.prescription,
+      status: "completed"
     });
+    fetchAppointments();
+  };
 
-    alert("Prescription Added ✅");
+  const markPaid = async (id) => {
+    await API.put(`/appointments/${id}`, {
+      paymentStatus: "paid"
+    });
+    fetchAppointments();
   };
 
   return (
     <Layout>
-      <div className="doctor-container">
-        
-        <h2 className="title">Doctor Dashboard 🩺</h2>
+      <div className="dashboard">
 
-        {/* 🧑‍⚕️ Doctor Info */}
-        {doctor && (
-          <div className="doctor-info">
-            <h3>Doctor Profile</h3>
-            <p><b>Specialization:</b> {doctor.specialization}</p>
-            <p><b>Experience:</b> {doctor.experience} yrs</p>
-            <p><b>Fees:</b> ₹{doctor.fees}</p>
-            <p><b>Available:</b> {doctor.available ? "Yes" : "No"}</p>
-          </div>
-        )}
+        <h2>Doctor Dashboard 🩺</h2>
 
-        {/* 📭 Empty */}
+        {/* PROFILE */}
+        <div className="card profile-card">
+          <h3>Your Profile</h3>
+          <p>Specialization: {doctor?.specialization || "N/A"}</p>
+          <p>Experience: {doctor?.experience || "N/A"}</p>
+          <p>Fees: ₹{doctor?.fees || "N/A"}</p>
+          <p>Hospital: {doctor?.hospital || "N/A"}</p>
+        </div>
+
         {appointments.length === 0 && (
-          <div className="empty">
-            <p>No Appointments Yet 📭</p>
-          </div>
+          <p>No Appointments</p>
         )}
 
-        {/* 📋 Appointments */}
-        <div className="card-container">
-          {appointments.map((a) => (
+        {/* APPOINTMENTS */}
+        <div className="grid">
+          {appointments.map(a => (
             <div className="card" key={a._id}>
-              <h3>{a.patientId?.name || "Patient"}</h3>
-              <p>Date: {new Date(a.date).toLocaleString()}</p>
-              <p>Status: {a.status}</p>
 
-              <div className="btn-group">
-                <button
-                  className="accept"
-                  onClick={() => updateStatus(a._id, "approved")}
-                >
-                  Accept
-                </button>
+              <h3>{a.patient?.name}</h3>
+              <p>{a.patient?.email}</p>
 
-                <button
-                  className="reject"
-                  onClick={() => updateStatus(a._id, "rejected")}
-                >
-                  Reject
-                </button>
+              <span className={`badge ${a.status}`}>
+                {a.status}
+              </span>
 
-                <button
-                  className="prescription"
-                  onClick={() => addPrescription(a.patientId?._id)}
-                >
-                  Add Rx
-                </button>
-              </div>
+              {/* PENDING */}
+              {a.status === "pending" && (
+                <>
+                  <select
+                    onChange={e => handleChange(a._id, "mode", e.target.value)}
+                  >
+                    <option>Select Mode</option>
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                  </select>
+
+                  <input type="date"
+                    onChange={e => handleChange(a._id, "date", e.target.value)}
+                  />
+
+                  <input type="time"
+                    onChange={e => handleChange(a._id, "time", e.target.value)}
+                  />
+
+                  <input placeholder="Fees"
+                    onChange={e => handleChange(a._id, "fees", e.target.value)}
+                  />
+
+                  {form[a._id]?.mode === "online" && (
+                    <input placeholder="Meeting Link"
+                      onChange={e => handleChange(a._id, "meetingLink", e.target.value)}
+                    />
+                  )}
+
+                  {form[a._id]?.mode === "offline" && (
+                    <input placeholder="Hospital Address"
+                      onChange={e => handleChange(a._id, "hospitalAddress", e.target.value)}
+                    />
+                  )}
+
+                  <button onClick={() => approve(a._id)}>Approve</button>
+                </>
+              )}
+
+              {/* APPROVED */}
+              {a.status === "approved" && (
+                <>
+                  <p>Date: {a.date}</p>
+                  <p>Time: {a.time}</p>
+                  <p>Fees: ₹{a.fees}</p>
+
+                  <textarea placeholder="Prescription"
+                    onChange={e => handleChange(a._id, "prescription", e.target.value)}
+                  />
+
+                  <button onClick={() => complete(a._id)}>Complete</button>
+                </>
+              )}
+
+              {/* COMPLETED */}
+              {a.status === "completed" && (
+                <>
+                  <p><b>Prescription:</b> {a.prescription}</p>
+                  <p><b>Payment:</b> {a.paymentStatus}</p>
+
+                  {a.paymentStatus === "pending" && (
+                    <button onClick={() => markPaid(a._id)}>
+                      Mark Paid
+                    </button>
+                  )}
+                </>
+              )}
+
             </div>
           ))}
         </div>

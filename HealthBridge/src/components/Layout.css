@@ -1,61 +1,76 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
+          body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+          }
 
-/* Layout */
-.layout {
-  display: flex;
-}
+          /* ===== MAIN LAYOUT ===== */
+          .layout {
+            display: flex;
+          }
 
-/* Navbar */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 220px;
-  right: 0;
-  height: 60px;
-  background: #0d6efd;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  z-index: 1000;
-}
+          /* ===== SIDEBAR ===== */
+          .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            z-index: 1000;
+            transition: 0.3s;
+          }
 
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 220px;
-  height: 100vh;
-  background: #1e293b;
-  color: white;
-  padding-top: 20px;
-}
+          .sidebar.collapsed {
+            width: 70px;
+          }
 
-/* Sidebar links */
-.sidebar a {
-  display: block;
-  padding: 12px 20px;
-  color: white;
-  text-decoration: none;
-  transition: 0.3s;
-}
+          /* ===== NAVBAR ===== */
+          .navbar {
+            position: fixed;
+            top: 0;
+            left: 240px;
+            right: 0;
+            height: 60px;
 
-.sidebar a:hover {
-  background: #334155;
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
 
-/* Main content */
-.main-content {
-  margin-left: 220px;
-  margin-top: 60px;
-  padding: 20px;
-  width: 100%;
-  min-height: calc(100vh - 60px);
-  background: #f1f5f9;
-  overflow-y: auto;
-}
+            background: linear-gradient(90deg, #0ea5e9, #2563eb);
+            color: white;
+
+            z-index: 900;
+            transition: 0.3s;
+          }
+
+          /* WHEN SIDEBAR COLLAPSED */
+          .sidebar.collapsed ~ .navbar {
+            left: 70px;
+          }
+
+          /* ===== MAIN CONTENT ===== */
+          .main-content {
+            margin-left: 240px;
+            margin-top: 60px;
+            padding: 20px;
+            width: 100%;
+            min-height: calc(100vh - 60px);
+
+            background: linear-gradient(
+              rgba(0,0,0,0.5),
+              rgba(0,0,0,0.5)
+            ),
+            url("https://img.freepik.com/premium-photo/smart-doctor-with-stethoscope-with-digital-icon-hologram-medical-graphic-diagram-laboratory-lab-hospital-background-virus-outbreak-coronavirus-covid19-technology-medical-concept_33829-671.jpg");
+
+            background-size: cover;
+            background-position: center;
+            transition: 0.3s;
+          }
+
+          /* SHIFT WHEN COLLAPSED */
+          .sidebar.collapsed ~ .main-content {
+            margin-left: 70px;
+          }

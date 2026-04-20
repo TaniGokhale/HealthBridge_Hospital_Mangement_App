@@ -1,9 +1,9 @@
 import express from "express";
 import {
   bookAppointment,
-  getAppointments,
   getMyAppointments,
-  cancelAppointment
+  getDoctorAppointments,
+  updateAppointment
 } from "../controllers/appointmentController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -11,8 +11,10 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.post("/", protect, bookAppointment);
-router.get("/", protect, getAppointments);
+
 router.get("/my", protect, getMyAppointments);
-router.delete("/:id", protect, cancelAppointment);
+router.get("/doctor", protect, getDoctorAppointments);
+
+router.put("/:id", protect, updateAppointment);
 
 export default router;
