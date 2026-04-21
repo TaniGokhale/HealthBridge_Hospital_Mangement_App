@@ -4,14 +4,14 @@ import "./Layout.css";
 
 function Layout({ children }) {
   return (
-    <div className="layout">
-      <Navbar />
+    <>
       <Sidebar />
+      <Navbar />
 
       <div className="main-content">
         {children}
       </div>
-    </div>
+    </>
   );
 }
 

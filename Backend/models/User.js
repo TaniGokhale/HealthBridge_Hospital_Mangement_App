@@ -4,7 +4,18 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   password: String,
-  role: { type: String, enum: ["admin", "doctor", "patient"], default: "patient" }
+
+  role: {
+    type: String,
+    enum: ["admin", "doctor", "patient"],
+    default: "patient"
+  },
+
+  // ✅ ADD THESE (IMPORTANT)
+  age: Number,
+  city: String,
+  aadhar: String
+
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);

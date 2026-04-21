@@ -1,15 +1,17 @@
 import User from "../models/User.js";
-import Doctor from "../models/Doctor.js"; // ✅ ADD THIS
+import Doctor from "../models/Doctor.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 
+// ================= REGISTER =================
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
     const userExists = await User.findOne({ email });
-    if (userExists)
+    if (userExists) {
       return res.status(400).json({ message: "User already exists" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -20,14 +22,17 @@ export const registerUser = async (req, res) => {
       role
     });
 
-    // ✅ 🔥 IMPORTANT FIX (AUTO CREATE DOCTOR)
+    // 🔥 AUTO CREATE DOCTOR PROFILE
     if (role === "doctor") {
       await Doctor.create({
         userId: user._id,
         specialization: "General",
         experience: 1,
         fees: 300,
-        available: true
+        hospital: "Not set",
+        address: "Not set",
+        availableDays: "Mon-Fri",
+        timings: "10AM - 5PM"
       });
     }
 
@@ -40,10 +45,12 @@ export const registerUser = async (req, res) => {
     });
 
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server Error" });
   }
 };
 
+// ================= LOGIN =================
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -54,6 +61,7 @@ export const loginUser = async (req, res) => {
       res.json({
         _id: user._id,
         name: user.name,
+        email: user.email,
         role: user.role,
         token: generateToken(user._id)
       });

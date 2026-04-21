@@ -9,8 +9,7 @@ const doctorSchema = new mongoose.Schema({
   hospital: String,
   address: String,
   availableDays: String,
-  timings: String
-
+  timings: String,
 }, { timestamps: true });
 
 export default mongoose.model("Doctor", doctorSchema);

@@ -1,52 +1,103 @@
-.dashboard {
-  animation: fadeIn 0.5s ease;
-}
-
-/* GLASS CARD */
-.card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-
-  border-radius: 15px;
-  padding: 20px;
-
+.page {
+  /* padding: 20px; */
+  margin-left: 20px;
+  margin-top: 20px;
   color: #fff;
-
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px) scale(1.02);
 }
 
 /* GRID */
 .grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
-  flex-wrap: wrap;
+}
+
+/* CARD */
+.card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* BUTTON */
+.card button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #38bdf8;
+  color: white;
+  cursor: pointer;
+}
+
+.card button:hover {
+  background: #0ea5e9;
+}
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  color: #ccc;
 }
 
 /* PROFILE */
 .profile-card {
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 12px;
   margin-bottom: 20px;
 }
 
-/* BUTTON */
-button {
-  background: #38bdf8;
-  border: none;
-  padding: 10px 15px;
+/* INPUT */
+.profile-card input {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
   border-radius: 8px;
-  cursor: pointer;
+  border: none;
 }
 
-button:hover {
-  background: #0ea5e9;
+/* BUTTON GROUP */
+.btn-group {
+  display: flex;
+  gap: 10px;
 }
 
-/* ANIMATION */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px);}
-  to { opacity: 1; transform: translateY(0);}
+.cancel {
+  background: crimson;
+}
+
+/* INPUT FIX */
+.profile-card input {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+
+  background: rgba(255,255,255,0.15);
+
+  color: #fff;                 /* ✅ TEXT WHITE */
+  font-size: 14px;
+}
+
+/* PLACEHOLDER */
+.profile-card input::placeholder {
+  color: #ddd;
+}
+
+/* FOCUS */
+.profile-card input:focus {
+  outline: none;
+  border: 1px solid #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
 }

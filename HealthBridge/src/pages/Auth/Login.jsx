@@ -2,7 +2,7 @@ import { useState } from "react";
 import API from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
-import "./auth.css"
+import "./auth.css";
 
 function Login() {
   const [form, setForm] = useState({});
@@ -17,21 +17,31 @@ function Login() {
       if (data.role === "admin") navigate("/admin");
       else if (data.role === "doctor") navigate("/doctor");
       else navigate("/patient");
-    } catch (err) {
+
+    } catch {
       alert("Invalid credentials ❌");
     }
   };
 
   return (
     <div className="auth-container">
+
+      {/* LOGO */}
+      <h2 className="logo">HealthBridge 🏥</h2>
+
       <div className="auth-box">
         <h2>Welcome Back 👋</h2>
 
-        <input placeholder="Email"
-          onChange={e=>setForm({...form,email:e.target.value})}/>
+        <input
+          placeholder="Email"
+          onChange={e => setForm({ ...form, email: e.target.value })}
+        />
 
-        <input type="password" placeholder="Password"
-          onChange={e=>setForm({...form,password:e.target.value})}/>
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={e => setForm({ ...form, password: e.target.value })}
+        />
 
         <button onClick={handleLogin}>Login</button>
 
@@ -42,4 +52,5 @@ function Login() {
     </div>
   );
 }
+
 export default Login;

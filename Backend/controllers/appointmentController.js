@@ -1,32 +1,42 @@
 import Appointment from "../models/Appointment.js";
 import Doctor from "../models/Doctor.js";
 
-
-// ================= BOOK APPOINTMENT (PATIENT) =================
+// ================= BOOK =================
 export const bookAppointment = async (req, res) => {
   try {
-    const doctor = await Doctor.findById(req.body.doctorId);
+    const { doctorId } = req.body;
 
+    const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" });
     }
 
+    const existing = await Appointment.findOne({
+      patient: req.user._id,
+      doctor: doctorId,
+      status: { $in: ["pending", "approved"] }
+    });
+
+    if (existing) {
+      return res.status(400).json({
+        message: "Already booked with this doctor"
+      });
+    }
+
     const appointment = await Appointment.create({
       patient: req.user._id,
-      doctor: doctor._id,
+      doctor: doctorId,
       status: "pending"
     });
 
     res.status(201).json(appointment);
 
-  } catch (error) {
-    console.log("BOOK ERROR:", error);
-    res.status(500).json({ message: "Server Error while booking" });
+  } catch (err) {
+    res.status(500).json({ message: "Booking failed" });
   }
 };
 
-
-// ================= PATIENT APPOINTMENTS =================
+// ================= PATIENT =================
 export const getMyAppointments = async (req, res) => {
   try {
     const data = await Appointment.find({ patient: req.user._id })
@@ -38,21 +48,18 @@ export const getMyAppointments = async (req, res) => {
 
     res.json(data);
 
-  } catch (error) {
-    console.log("PATIENT FETCH ERROR:", error);
-    res.status(500).json({ message: "Error fetching appointments" });
+  } catch {
+    res.status(500).json({ message: "Fetch error" });
   }
 };
 
-
-// ================= DOCTOR APPOINTMENTS =================
+// ================= DOCTOR =================
 export const getDoctorAppointments = async (req, res) => {
   try {
     const doctor = await Doctor.findOne({ userId: req.user._id });
 
-    // ❗ VERY IMPORTANT CHECK
     if (!doctor) {
-      return res.status(404).json({ message: "Doctor profile not found" });
+      return res.status(404).json({ message: "Doctor not found" });
     }
 
     const data = await Appointment.find({ doctor: doctor._id })
@@ -61,30 +68,30 @@ export const getDoctorAppointments = async (req, res) => {
 
     res.json(data);
 
-  } catch (error) {
-    console.log("DOCTOR FETCH ERROR:", error);
-    res.status(500).json({ message: "Error fetching doctor appointments" });
+  } catch {
+    res.status(500).json({ message: "Fetch error" });
   }
 };
 
-
-// ================= UPDATE APPOINTMENT =================
+// ================= UPDATE =================
 export const updateAppointment = async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id);
 
     if (!appointment) {
-      return res.status(404).json({ message: "Appointment not found" });
+      return res.status(404).json({ message: "Not found" });
     }
 
-    // update fields safely
     const {
       status,
       date,
       time,
       meetingLink,
       fees,
-      prescription
+      prescription,
+      paymentStatus,
+      mode,
+      hospitalAddress
     } = req.body;
 
     if (status) appointment.status = status;
@@ -93,16 +100,15 @@ export const updateAppointment = async (req, res) => {
     if (meetingLink) appointment.meetingLink = meetingLink;
     if (fees) appointment.fees = fees;
     if (prescription) appointment.prescription = prescription;
+    if (paymentStatus) appointment.paymentStatus = paymentStatus;
+    if (mode) appointment.mode = mode;
+    if (hospitalAddress) appointment.hospitalAddress = hospitalAddress;
 
     await appointment.save();
 
-    res.json({
-      message: "Appointment updated successfully",
-      appointment
-    });
+    res.json(appointment);
 
-  } catch (error) {
-    console.log("UPDATE ERROR:", error);
-    res.status(500).json({ message: "Error updating appointment" });
+  } catch {
+    res.status(500).json({ message: "Update error" });
   }
 };

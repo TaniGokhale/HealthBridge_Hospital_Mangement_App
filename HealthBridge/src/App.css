@@ -1,3 +1,4 @@
+/* FONT */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
@@ -7,5 +8,21 @@ body {
   background: url("https://img.freepik.com/premium-photo/smart-doctor-with-stethoscope-with-digital-icon-hologram-medical-graphic-diagram-laboratory-lab-hospital-background-virus-outbreak-coronavirus-covid19-technology-medical-concept_33829-671.jpg")
   no-repeat center center/cover;
 
-  backdrop-filter: blur(6px);
+  position: relative;
+  min-height: 100vh;
+}
+
+/* 🔥 DARK GLASS OVERLAY */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(57, 58, 74, 0.438); /* darkness */
+  backdrop-filter: blur(6px);     /* blur effect */
+
+  z-index: -1;
 }

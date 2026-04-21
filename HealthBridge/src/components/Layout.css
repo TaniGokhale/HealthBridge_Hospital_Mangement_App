@@ -1,76 +1,207 @@
-          body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-          }
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
 
-          /* ===== MAIN LAYOUT ===== */
-          .layout {
-            display: flex;
-          }
+/* BODY BACKGROUND */
+body {
+  /* background: linear-gradient(135deg, #0f172a, #1e3a8a); */
+  color: white;
+}
 
-          /* ===== SIDEBAR ===== */
-          .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 240px;
-            height: 100vh;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            color: white;
-            z-index: 1000;
-            transition: 0.3s;
-          }
+/* ================= SIDEBAR ================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 100vh;
 
-          .sidebar.collapsed {
-            width: 70px;
-          }
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(12px);
 
-          /* ===== NAVBAR ===== */
-          .navbar {
-            position: fixed;
-            top: 0;
-            left: 240px;
-            right: 0;
-            height: 60px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
+  transition: 0.3s;
+  z-index: 1000;
+}
 
-            background: linear-gradient(90deg, #0ea5e9, #2563eb);
-            color: white;
+.sidebar.collapsed {
+  width: 70px;
+}
 
-            z-index: 900;
-            transition: 0.3s;
-          }
+/* TOP */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
 
-          /* WHEN SIDEBAR COLLAPSED */
-          .sidebar.collapsed ~ .navbar {
-            left: 70px;
-          }
+.top h2 {
+  font-size: 18px;
+  color: #38bdf8;
+}
 
-          /* ===== MAIN CONTENT ===== */
-          .main-content {
-            margin-left: 240px;
-            margin-top: 60px;
-            padding: 20px;
-            width: 100%;
-            min-height: calc(100vh - 60px);
+.menu-btn {
+  cursor: pointer;
+  font-size: 18px;
+}
 
-            background: linear-gradient(
-              rgba(0,0,0,0.5),
-              rgba(0,0,0,0.5)
-            ),
-            url("https://img.freepik.com/premium-photo/smart-doctor-with-stethoscope-with-digital-icon-hologram-medical-graphic-diagram-laboratory-lab-hospital-background-virus-outbreak-coronavirus-covid19-technology-medical-concept_33829-671.jpg");
+/* LINKS */
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-            background-size: cover;
-            background-position: center;
-            transition: 0.3s;
-          }
+  padding: 10px;
+  margin-bottom: 10px;
 
-          /* SHIFT WHEN COLLAPSED */
-          .sidebar.collapsed ~ .main-content {
-            margin-left: 70px;
-          }
+  color: #cbd5f5;
+  text-decoration: none;
+  border-radius: 8px;
+
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  background: rgba(56, 189, 248, 0.2);
+  transform: translateX(5px);
+}
+
+/* ACTIVE */
+.sidebar a.active {
+  background: #38bdf8;
+  color: black;
+  font-weight: 600;
+}
+
+/* LOGOUT */
+.logout {
+  margin-top: auto;
+  padding: 10px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #ef4444;
+  color: white;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout:hover {
+  background: #dc2626;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  right: 0;
+  height: 60px;
+
+  background: rgba(30, 58, 138, 0.9);
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 20px;
+  z-index: 999;
+}
+
+/* COLLAPSE SUPPORT */
+.sidebar.collapsed ~ .navbar {
+  left: 70px;
+}
+
+/* ================= MAIN CONTENT ================= */
+.main-content {
+  margin-left: 230px;
+  margin-top: 60px;
+
+  padding: 20px;
+  min-height: calc(100vh - 60px);
+
+  overflow-y: auto;
+}
+
+/* COLLAPSE SUPPORT */
+.sidebar.collapsed ~ .main-content {
+  margin-left: 70px;
+}
+
+/* ================= CARD (GLOBAL) ================= */
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* ================= BUTTON ================= */
+button {
+  padding: 8px 14px;
+  margin-top: 10px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #38bdf8;
+  color: black;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #0ea5e9;
+  transform: scale(1.05);
+}
+
+/* ================= INPUT ================= */
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+/* ================= PAGE ================= */
+.page {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
