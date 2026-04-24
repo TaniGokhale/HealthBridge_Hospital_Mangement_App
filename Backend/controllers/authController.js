@@ -3,10 +3,19 @@ import Doctor from "../models/Doctor.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 
-// ================= REGISTER =================
+// REGISTER
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const {
+      name,
+      email,
+      password,
+      role,
+      specialization,
+      experience,
+      fees,
+      hospital
+    } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -22,19 +31,16 @@ export const registerUser = async (req, res) => {
       role
     });
 
-    // 🔥 AUTO CREATE DOCTOR PROFILE
-    if (role === "doctor") {
-      await Doctor.create({
-        userId: user._id,
-        specialization: "General",
-        experience: 1,
-        fees: 300,
-        hospital: "Not set",
-        address: "Not set",
-        availableDays: "Mon-Fri",
-        timings: "10AM - 5PM"
-      });
-    }
+    // ✅ SAVE DOCTOR DATA FROM FRONTEND
+   if (role === "doctor") {
+  await Doctor.create({
+    userId: user._id,
+    specialization: req.body.specialization || "General",
+    experience: req.body.experience || 1,
+    fees: req.body.fees || 300,
+    hospital: req.body.hospital || "Not set"
+  });
+}
 
     res.json({
       _id: user._id,
@@ -50,7 +56,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// ================= LOGIN =================
+// LOGIN
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -69,7 +75,7 @@ export const loginUser = async (req, res) => {
       res.status(401).json({ message: "Invalid credentials" });
     }
 
-  } catch (error) {
+  } catch {
     res.status(500).json({ message: "Server Error" });
   }
 };

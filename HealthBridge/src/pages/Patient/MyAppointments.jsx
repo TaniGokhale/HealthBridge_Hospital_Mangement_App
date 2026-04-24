@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
-import "./patient.css";
+import "./Patient.css";
 
 function MyAppointments() {
   const [data, setData] = useState([]);
@@ -31,62 +31,66 @@ function MyAppointments() {
 
       <h2>My Appointments</h2>
 
-      {data.length === 0 && <p>No Appointments</p>}
+      {data.length === 0 && <p className="empty">No Appointments</p>}
 
-      {data.map(a => (
-        <div className="card" key={a._id}>
+      <div className="grid">
 
-          {/* ✅ DOCTOR FULL INFO */}
-          <h3>{a.doctor?.userId?.name}</h3>
-          <p>Email: {a.doctor?.userId?.email}</p>
-          <p>Specialization: {a.doctor?.specialization}</p>
-          <p>Hospital: {a.doctor?.hospital}</p>
-          <p>Fees: ₹{a.doctor?.fees}</p>
+        {data.map(a => (
+          <div className="card modern-card" key={a._id}>
 
-          <hr />
+            <div className="card-header">
+              <h3>{a.doctor?.userId?.name}</h3>
+              <span className={`status ${a.status}`}>
+                {a.status}
+              </span>
+            </div>
 
-          <p><b>Status:</b> {a.status}</p>
+            <p>📧 {a.doctor?.userId?.email}</p>
+            <p>🏥 {a.doctor?.hospital}</p>
+            <p>💰 ₹{a.doctor?.fees}</p>
 
-          {/* APPROVED / COMPLETED */}
-          {a.status !== "pending" && (
-            <>
-              <p>Date: {a.date}</p>
-              <p>Time: {a.time}</p>
-              <p>Consultation Fees: ₹{a.fees}</p>
-            </>
-          )}
+            {a.date && (
+              <p>📅 {a.date} | ⏰ {a.time}</p>
+            )}
 
-          {/* MODE */}
-          {a.mode === "online" && a.meetingLink && (
-            <a href={a.meetingLink} target="_blank" rel="noreferrer">
-              Join Meeting 💻
-            </a>
-          )}
+            {a.mode === "online" && a.meetingLink && (
+              <a
+                className="join-btn"
+                href={a.meetingLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Join Meeting 💻
+              </a>
+            )}
 
-          {a.mode === "offline" && (
-            <p>Visit: {a.hospitalAddress}</p>
-          )}
+            {a.mode === "offline" && (
+              <p>📍 {a.hospitalAddress}</p>
+            )}
 
-          {/* PRESCRIPTION */}
-          {a.prescription && (
-            <p><b>Prescription:</b> {a.prescription}</p>
-          )}
+            {a.prescription && (
+              <p className="prescription">
+                📝 {a.prescription}
+              </p>
+            )}
 
-          {/* PAYMENT */}
-          <p><b>Payment:</b> {a.paymentStatus}</p>
+            <p>💳 Payment: {a.paymentStatus}</p>
 
-          {/* ❌ CANCEL ONLY IF PENDING */}
-          {a.status === "pending" && (
-            <button onClick={() => cancel(a._id)}>
-              Cancel Appointment ❌
-            </button>
-          )}
+            {a.status === "pending" && (
+              <button
+                className="btn-danger"
+                onClick={() => cancel(a._id)}
+              >
+                Cancel ❌
+              </button>
+            )}
 
-        </div>
-      ))}
+          </div>
+        ))}
 
+      </div>
     </div>
   );
 }
 
-export default MyAppointments;
+export default MyAppointments; 

@@ -81,7 +81,8 @@ export const updateAppointment = async (req, res) => {
     if (!appointment) {
       return res.status(404).json({ message: "Not found" });
     }
-
+if (req.body.mode) appointment.mode = req.body.mode;
+if (req.body.hospitalAddress) appointment.hospitalAddress = req.body.hospitalAddress;
     const {
       status,
       date,

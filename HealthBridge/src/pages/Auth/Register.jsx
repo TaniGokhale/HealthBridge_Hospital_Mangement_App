@@ -17,15 +17,18 @@ function Register() {
 
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
-    try {
-      await API.post("/auth/register", form);
-      alert("Registered Successfully ✅");
-      navigate("/");
-    } catch (err) {
-      alert("Registration Failed ❌");
-    }
-  };
+ const handleRegister = async () => {
+  try {
+    console.log(form); // 👈 ये देखो
+
+    await API.post("/auth/register", form);
+
+    alert("Registered Successfully ✅");
+    navigate("/");
+  } catch (err) {
+    alert("Registration Failed ❌");
+  }
+};
 
   return (
     <div className="auth-container">
